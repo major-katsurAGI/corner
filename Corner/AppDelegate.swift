@@ -3,19 +3,21 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     let appState = AppState()
+    var mainWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Set the window to stay on top once it’s created by SwiftUI
         if let window = NSApplication.shared.windows.first {
-            window.level = .floating
+            window.level = .floating  // Keeps the window above others
+            mainWindow = window       // Store reference to the main window
         }
     }
 
     @objc func selectFolder() {
+        guard let window = mainWindow else { return }
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = true
         openPanel.canChooseFiles = false
-        openPanel.begin { result in
+        openPanel.beginSheetModal(for: window) { result in
             if result == .OK, let url = openPanel.url {
                 self.appState.selectedFolder = url
             }
