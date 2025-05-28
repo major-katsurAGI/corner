@@ -7,8 +7,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         if let window = NSApplication.shared.windows.first {
-            window.level = .floating  // Keeps the window above others
-            mainWindow = window       // Store reference to the main window
+            window.level = .floating
+            mainWindow = window
+        }
+        appState.selectFolder = { [weak self] in
+            self?.selectFolder()
         }
     }
 

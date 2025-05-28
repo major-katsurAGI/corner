@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var imageURLs: [URL] = []
     @State private var currentImageIndex = 0
     @State private var timer: Timer?
+    @State private var isHovering = false
 
     var body: some View {
         VStack {
@@ -17,6 +18,21 @@ struct ContentView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onHover { hovering in
+            isHovering = hovering
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if isHovering || appState.selectedFolder == nil {
+                Button(action: { appState.selectFolder?() }) {
+                    Image(systemName: "folder")
+                        .padding(8)
+                        .background(Color.black.opacity(0.5))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding()
+            }
+        }
         .onChange(of: appState.selectedFolder) { newFolder in
             if let folder = newFolder {
                 loadImages(from: folder)
