@@ -1,0 +1,46 @@
+# Xcode
+#
+# General
+*.xcodeproj/*/*.xcuserstate
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+*.xccheckout
+*.moved-aside
+DerivedData/
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Swift Package Manager
+.build/
+Packages/
+*.xcframework
+
+# macOS
+.DS_Store
+
+# Playgrounds
+*.playground/Contents.swift
+*.playground/timeline.xctimeline
+*.playground/Contents.xcplayground
+
+# Xcode temporary files
+*.swp
+*~.nib
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Other
+.idea/
+.vscode/
+*.log
