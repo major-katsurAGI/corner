@@ -41,7 +41,7 @@ struct ContentView: View {
     }
 
     private func loadImages(from folder: URL) {
-        let imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp"]
+        let imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "heic"]
         imageURLs = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)
             .filter { imageExtensions.contains($0.pathExtension.lowercased()) }) ?? []
         currentImageIndex = 0
