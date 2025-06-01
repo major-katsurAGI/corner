@@ -1,15 +1,13 @@
 import Foundation
 
 enum Anchor {
-    case topLeft
-    case topRight
-    case bottomLeft
-    case bottomRight
+    case left
+    case right
 }
 
 class AppState: ObservableObject {
     @Published var selectedFolder: URL?
     @Published var currentImageSize: NSSize?
-    @Published var anchor: Anchor = .topLeft
+    @Published var anchor: Anchor = .left      // default: left edge
     var selectFolder: (() -> Void)?
 }

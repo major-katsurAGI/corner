@@ -17,59 +17,58 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.level = .screenSaver
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.hidesOnDeactivate = false
-        panel.backgroundColor = .black.withAlphaComponent(0.5) // Translucent black at 50% opacity
+        panel.backgroundColor = .black.withAlphaComponent(0.5)
         panel.center()
 
-        let contentView = ContentView().environmentObject(appState)
-        let hostingView = NSHostingView(rootView: contentView)
-        panel.contentView = hostingView
+        panel.contentView = NSHostingView(rootView: ContentView().environmentObject(appState))
         panel.makeKeyAndOrderFront(nil)
 
-        appState.selectFolder = { [weak self] in
-            self?.selectFolder()
-        }
+        appState.selectFolder = { [weak self] in self?.selectFolder() }
 
+        // Resize panel on every new image size (no animation → no slide-in effect)
         appState.$currentImageSize
+            .receive(on: RunLoop.main)
             .sink { [weak self] size in
-                guard let self = self, let size = size else { return }
-                let currentFrame = self.panel.frame
-                let anchor = self.appState.anchor
-                let newFrame = self.newFrameForAnchor(currentFrame: currentFrame, newSize: size, anchor: anchor)
-                self.panel.setFrame(newFrame, display: true, animate: true)
+                guard
+                    let self,
+                    let size
+                else { return }
+
+                let newFrame = self.frame(for: size, anchored: self.appState.anchor)
+                self.panel.setFrame(newFrame, display: true, animate: false)   // ← animate: false
             }
             .store(in: &cancellables)
     }
 
-    @objc func selectFolder() {
+    // MARK: - Folder picker
+    private func selectFolder() {
         guard let window = panel else { return }
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories = true
-        openPanel.canChooseFiles = false
-        openPanel.beginSheetModal(for: window) { result in
-            if result == .OK, let url = openPanel.url {
-                self.appState.selectedFolder = url
-            }
+        let open = NSOpenPanel()
+        open.canChooseDirectories = true
+        open.canChooseFiles = false
+
+        open.beginSheetModal(for: window) { result in
+            if result == .OK { self.appState.selectedFolder = open.url }
         }
     }
 
-    private func newFrameForAnchor(currentFrame: NSRect, newSize: NSSize, anchor: Anchor) -> NSRect {
-        switch anchor {
-        case .topLeft:
-            let newX = currentFrame.minX
-            let newY = currentFrame.maxY - newSize.height
-            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
-        case .topRight:
-            let newX = currentFrame.maxX - newSize.width
-            let newY = currentFrame.maxY - newSize.height
-            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
-        case .bottomLeft:
-            let newX = currentFrame.minX
-            let newY = currentFrame.minY
-            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
-        case .bottomRight:
-            let newX = currentFrame.maxX - newSize.width
-            let newY = currentFrame.minY
-            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
+    // MARK: - Keep chosen edge fixed while resizing (panel itself still draggable)
+    private func frame(for newSize: NSSize, anchored side: Anchor) -> NSRect {
+        let current = panel.frame
+
+        switch side {
+        case .left:
+            return NSRect(x: current.minX,
+                          y: current.minY,
+                          width: newSize.width,
+                          height: newSize.height)
+
+        case .right:
+            let newX = current.maxX - newSize.width
+            return NSRect(x: newX,
+                          y: current.minY,
+                          width: newSize.width,
+                          height: newSize.height)
         }
     }
 }
