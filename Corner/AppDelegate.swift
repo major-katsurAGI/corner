@@ -6,13 +6,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var panel: DraggablePanel!
     let appState = AppState()
     private var cancellables = Set<AnyCancellable>()
-    private let fixedHeight: CGFloat = 300
+    private let fixedHeight: CGFloat = 220
     private let cornerRadius: CGFloat = 16     // <- adjust if you want rounder / squarer
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Borderless, always-on-top panel
         panel = DraggablePanel(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: fixedHeight),
+            contentRect: NSRect(x: 0, y: 0, width: 350, height: fixedHeight),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false

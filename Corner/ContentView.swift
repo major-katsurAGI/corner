@@ -13,7 +13,7 @@ struct ContentView: View {
 
     // Hover-fade
     @State private var isHovering = false
-    private let fixedHeight: CGFloat = 300
+    private let fixedHeight: CGFloat = 220
 
     // MARK: body
     var body: some View {
@@ -34,7 +34,7 @@ struct ContentView: View {
                 .opacity(isHovering || appState.selectedFolder == nil ? 1 : 0)
                 .allowsHitTesting(isHovering || appState.selectedFolder == nil)
         }
-        .frame(width: appState.currentImageSize?.width ?? 480,
+        .frame(width: appState.currentImageSize?.width ?? 350,
                height: fixedHeight)
         .background(Color.clear)
         .onHover { isHovering = $0 }
@@ -48,7 +48,7 @@ struct ContentView: View {
         }
         .onAppear {
             if appState.currentImageSize == nil {
-                appState.currentImageSize = NSSize(width: 480, height: fixedHeight)
+                appState.currentImageSize = NSSize(width: 350, height: fixedHeight)
             }
         }
     }
@@ -98,9 +98,8 @@ struct ContentView: View {
     }
 
     private var anchorButton: some View {
-        Menu {
-            Button("Left Edge")  { appState.anchor = .left  }
-            Button("Right Edge") { appState.anchor = .right }
+        Button {
+            appState.anchor = appState.anchor == .left ? .right : .left
         } label: {
             Image(systemName: appState.anchor == .left ? "arrow.left" : "arrow.right")
                 .padding(8)
