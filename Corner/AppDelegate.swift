@@ -7,25 +7,42 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let appState = AppState()
     private var cancellables = Set<AnyCancellable>()
     private let fixedHeight: CGFloat = 300
+    private let cornerRadius: CGFloat = 16     // <- adjust if you want rounder / squarer
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Borderless, always-on-top panel
         panel = DraggablePanel(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: fixedHeight),
             styleMask: [.borderless, .nonactivatingPanel],
-            backing: .buffered, defer: false
+            backing: .buffered,
+            defer: false
         )
         panel.level = .screenSaver
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.hidesOnDeactivate = false
-        panel.backgroundColor = .black.withAlphaComponent(0.5)
+        panel.isOpaque = false                    // allow transparency
+        panel.backgroundColor = .clear            // panel itself is clear
+        panel.hasShadow = true
         panel.center()
 
-        panel.contentView = NSHostingView(rootView: ContentView().environmentObject(appState))
+        // SwiftUI content
+        let hostingView = NSHostingView(rootView: ContentView().environmentObject(appState))
+        panel.contentView = hostingView
+
+        // --- Rounded corners & translucent backdrop -------------------------
+        hostingView.wantsLayer = true
+        if let layer = hostingView.layer {
+            layer.cornerRadius = cornerRadius
+            layer.masksToBounds = true
+            layer.backgroundColor = NSColor.black.withAlphaComponent(0.5).cgColor
+        }
+        // --------------------------------------------------------------------
+
         panel.makeKeyAndOrderFront(nil)
 
         appState.selectFolder = { [weak self] in self?.selectFolder() }
 
-        // Resize panel on every new image size (no animation → no slide-in effect)
+        // Resize panel whenever a new image size comes in
         appState.$currentImageSize
             .receive(on: RunLoop.main)
             .sink { [weak self] size in
@@ -35,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 else { return }
 
                 let newFrame = self.frame(for: size, anchored: self.appState.anchor)
-                self.panel.setFrame(newFrame, display: true, animate: false)   // ← animate: false
+                self.panel.setFrame(newFrame, display: true, animate: false)   // no slide-in animation
             }
             .store(in: &cancellables)
     }
@@ -52,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    // MARK: - Keep chosen edge fixed while resizing (panel itself still draggable)
+    // MARK: - Keep chosen edge fixed while resizing (panel still draggable)
     private func frame(for newSize: NSSize, anchored side: Anchor) -> NSRect {
         let current = panel.frame
 

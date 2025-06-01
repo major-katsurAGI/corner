@@ -10,7 +10,7 @@ struct ContentView: View {
     @State private var isHovering = false
 
     private let fixedHeight: CGFloat = 300
-    private let rotationInterval: TimeInterval = 5
+    private let rotationInterval: TimeInterval = 30
 
     // Buttons sit in the same corner as the image edge
     private var buttonAlignment: Alignment {
@@ -60,7 +60,10 @@ struct ContentView: View {
                 .aspectRatio(contentMode: .fit)   // fills full height; width matches panel
         } else {
             Text("Select a folder to display images")
-                .frame(height: fixedHeight)
+                .frame(maxWidth: .infinity,            // fill entire panel width
+                       maxHeight: .infinity,           // fill height
+                       alignment: .center)             // center horizontally & vertically
+                .multilineTextAlignment(.center)
         }
     }
 
@@ -94,8 +97,7 @@ struct ContentView: View {
 
         DispatchQueue.global(qos: .userInitiated).async {
             let exts = ["jpg", "jpeg", "png", "gif", "bmp", "heic"]
-            let urls = (try? FileManager.default.contentsOfDirectory(at: folder,
-                                                                     includingPropertiesForKeys: nil)
+            let urls = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)
                 .filter { exts.contains($0.pathExtension.lowercased()) }) ?? []
 
             DispatchQueue.main.async {
