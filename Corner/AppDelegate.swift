@@ -6,63 +6,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var panel: DraggablePanel!
     let appState = AppState()
     private var cancellables = Set<AnyCancellable>()
+    private let fixedHeight: CGFloat = 300
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Create the DraggablePanel
         panel = DraggablePanel(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: fixedHeight),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered, defer: false
         )
-        
-        // Configure panel to stay on top and appear in all spaces
         panel.level = .screenSaver
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.hidesOnDeactivate = false
         panel.backgroundColor = .clear
         panel.center()
-        
-        // Inject AppState into the ContentView's environment
-        let contentView = ContentView()
-            .environmentObject(appState)
-        
-        // Set the SwiftUI content and ensure it fills the panel
+
+        let contentView = ContentView().environmentObject(appState)
         let hostingView = NSHostingView(rootView: contentView)
-        hostingView.translatesAutoresizingMaskIntoConstraints = false
         panel.contentView = hostingView
-        
-        // Constrain hostingView to fill the panel
-        NSLayoutConstraint.activate([
-            hostingView.topAnchor.constraint(equalTo: panel.contentView!.topAnchor),
-            hostingView.bottomAnchor.constraint(equalTo: panel.contentView!.bottomAnchor),
-            hostingView.leadingAnchor.constraint(equalTo: panel.contentView!.leadingAnchor),
-            hostingView.trailingAnchor.constraint(equalTo: panel.contentView!.trailingAnchor)
-        ])
-        
         panel.makeKeyAndOrderFront(nil)
-        
-        // Set up folder selection closure
+
         appState.selectFolder = { [weak self] in
             self?.selectFolder()
         }
-        
-        // Observe image size changes to resize the panel
+
         appState.$currentImageSize
             .sink { [weak self] size in
                 guard let self = self, let size = size else { return }
-                // Get current top-left corner
                 let currentFrame = self.panel.frame
-                let topLeft = NSPoint(x: currentFrame.minX, y: currentFrame.maxY)
-                
-                // Create new frame with fixed top-left
-                let newFrame = NSRect(
-                    x: topLeft.x,
-                    y: topLeft.y - size.height,
-                    width: size.width,
-                    height: size.height
-                )
-                
-                // Update panel frame
+                let anchor = self.appState.anchor
+                let newFrame = self.newFrameForAnchor(currentFrame: currentFrame, newSize: size, anchor: anchor)
                 self.panel.setFrame(newFrame, display: true, animate: true)
             }
             .store(in: &cancellables)
@@ -77,6 +49,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if result == .OK, let url = openPanel.url {
                 self.appState.selectedFolder = url
             }
+        }
+    }
+
+    private func newFrameForAnchor(currentFrame: NSRect, newSize: NSSize, anchor: Anchor) -> NSRect {
+        switch anchor {
+        case .topLeft:
+            let newX = currentFrame.minX
+            let newY = currentFrame.maxY - newSize.height
+            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
+        case .topRight:
+            let newX = currentFrame.maxX - newSize.width
+            let newY = currentFrame.maxY - newSize.height
+            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
+        case .bottomLeft:
+            let newX = currentFrame.minX
+            let newY = currentFrame.minY
+            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
+        case .bottomRight:
+            let newX = currentFrame.maxX - newSize.width
+            let newY = currentFrame.minY
+            return NSRect(x: newX, y: newY, width: newSize.width, height: newSize.height)
         }
     }
 }
