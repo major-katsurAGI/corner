@@ -17,9 +17,22 @@ struct ContentView: View {
         }
     }
 
+    var imageAlignment: Alignment {
+        switch appState.anchor {
+        case .topLeft, .bottomLeft:
+            return .leading
+        case .topRight, .bottomRight:
+            return .trailing
+        }
+    }
+
     var body: some View {
         ZStack(alignment: buttonAlignment) {
+            // Image or placeholder with dynamic alignment
             HStack {
+                if appState.anchor == .topRight || appState.anchor == .bottomRight {
+                    Spacer()
+                }
                 if let imageURL = imageURLs[safe: currentImageIndex], let image = NSImage(contentsOf: imageURL) {
                     Image(nsImage: image)
                         .resizable()
@@ -32,10 +45,13 @@ struct ContentView: View {
                     Text("Select a folder to display images")
                         .frame(height: fixedHeight)
                 }
-                Spacer()
+                if appState.anchor == .topLeft || appState.anchor == .bottomLeft {
+                    Spacer()
+                }
             }
             .frame(height: fixedHeight)
 
+            // Buttons
             if isHovering || appState.selectedFolder == nil {
                 HStack {
                     Button(action: { appState.selectFolder?() }) {
@@ -61,7 +77,7 @@ struct ContentView: View {
             }
         }
         .frame(width: appState.currentImageSize?.width ?? 480, height: fixedHeight)
-        .background(Color.clear)
+        .background(Color.clear) // Transparent to show NSPanel's background
         .onHover { hovering in
             isHovering = hovering
         }

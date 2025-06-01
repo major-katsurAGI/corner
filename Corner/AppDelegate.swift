@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.level = .screenSaver
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.hidesOnDeactivate = false
-        panel.backgroundColor = .clear
+        panel.backgroundColor = .black.withAlphaComponent(0.5) // Translucent black at 50% opacity
         panel.center()
 
         let contentView = ContentView().environmentObject(appState)
