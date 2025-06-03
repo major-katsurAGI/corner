@@ -89,7 +89,9 @@ struct ContentView: View {
                 if appState.anchor == .left {
                     anchorButton
                     Spacer()
+                    intervalMenu
                 } else {
+                    intervalMenu
                     Spacer()
                     anchorButton
                 }
@@ -122,7 +124,6 @@ struct ContentView: View {
             HStack(spacing: 6) {
                 folderButton
                 if appState.selectedFolder != nil { clearButton }
-                intervalMenu
                 Spacer()
             }
         }
@@ -170,7 +171,7 @@ struct ContentView: View {
             Button("1 hour")      { setInterval(3600) }
         } label: {
             Image(systemName: "timer")
-                .padding(7)
+                .padding(6)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
