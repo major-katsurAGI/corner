@@ -50,6 +50,10 @@ struct ContentView: View {
             if appState.currentImageSize == nil {
                 appState.currentImageSize = NSSize(width: 350, height: fixedHeight)
             }
+            
+            if let folder = appState.selectedFolder, imageURLs.isEmpty {
+                loadImages(from: folder)
+            }
         }
     }
 
@@ -87,8 +91,9 @@ struct ContentView: View {
             Spacer()
 
             //------------------- BOTTOM-LEFT: folder + interval ------------
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 folderButton
+                if appState.selectedFolder != nil { clearButton }
                 intervalMenu
                 Spacer()
             }
@@ -101,7 +106,7 @@ struct ContentView: View {
         Button {
             appState.anchor = appState.anchor == .left ? .right : .left
         } label: {
-            Image(systemName: appState.anchor == .left ? "arrow.left" : "arrow.right")
+            Image(systemName: appState.anchor == .left ? "arrow.right" : "arrow.left")
                 .padding(8)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
@@ -111,6 +116,15 @@ struct ContentView: View {
     private var folderButton: some View {
         Button { appState.selectFolder?() } label: {
             Image(systemName: "folder")
+                .padding(8)
+                .background(Color.black.opacity(0.5))
+                .clipShape(Circle())
+        }
+    }
+    
+    private var clearButton: some View {
+        Button { appState.clearSelection() } label: {
+            Image(systemName: "xmark.circle")
                 .padding(8)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
@@ -144,8 +158,7 @@ struct ContentView: View {
 
         DispatchQueue.global(qos: .userInitiated).async {
             let exts = ["jpg", "jpeg", "png", "gif", "bmp", "heic"]
-            let urls = (try? FileManager.default.contentsOfDirectory(at: folder,
-                                                                     includingPropertiesForKeys: nil)
+            let urls = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)
                          .filter { exts.contains($0.pathExtension.lowercased()) }) ?? []
 
             DispatchQueue.main.async {

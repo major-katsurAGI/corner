@@ -55,6 +55,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.panel.setFrame(newFrame, display: true, animate: false)   // no slide-in animation
             }
             .store(in: &cancellables)
+        
+        if let data = UserDefaults.standard.data(forKey: "lastFolderBookmark") {
+            var stale = false
+            if let url = try? URL(resolvingBookmarkData: data,
+                                  options: [.withSecurityScope],
+                                  relativeTo: nil,
+                                  bookmarkDataIsStale: &stale),
+               !stale, url.startAccessingSecurityScopedResource() {
+                appState.selectedFolder = url          // kicks off loadImages → startRotation
+            }
+        }
     }
 
     // MARK: - Folder picker
