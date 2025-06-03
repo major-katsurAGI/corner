@@ -44,7 +44,14 @@ struct ContentView: View {
 
         // Load images when user picks a folder
         .onChange(of: appState.selectedFolder) { folder in
-            if let folder { loadImages(from: folder) }
+            if let folder {          // user picked (or restored) a folder
+                loadImages(from: folder)
+            } else {                 // user clicked “×” ➞ reset to placeholder
+                stopRotation()
+                imageURLs.removeAll()
+                currentImage = nil
+                appState.currentImageSize = NSSize(width: 350, height: fixedHeight)
+            }
         }
         .onAppear {
             if appState.currentImageSize == nil {
