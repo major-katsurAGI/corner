@@ -24,9 +24,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.backgroundColor = .clear
         panel.hasShadow = true
         panel.center()
+        panel.isMovableByWindowBackground = true
 
-        // SwiftUI content
-        let hostingView = NSHostingView(rootView: ContentView().environmentObject(appState))
+        let hostingView = DragHostingView(rootView: ContentView().environmentObject(appState))
         panel.contentView = hostingView
 
         // --- Rounded corners & translucent backdrop -------------------------

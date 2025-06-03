@@ -12,6 +12,7 @@
 		3710CA342DE7940200AB9B30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3710CA332DE7940200AB9B30 /* Assets.xcassets */; };
 		3710CA372DE7940200AB9B30 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3710CA362DE7940200AB9B30 /* Preview Assets.xcassets */; };
 		3748A36F2DECB21900315459 /* DraggablePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3748A36E2DECB21900315459 /* DraggablePanel.swift */; };
+		37872D372DEF6836006DA2CA /* DragHostingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37872D362DEF6836006DA2CA /* DragHostingView.swift */; };
 		37A553E82DE795B900FE8730 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A553E72DE795B900FE8730 /* AppDelegate.swift */; };
 		37A553EC2DE797C600FE8730 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A553EB2DE797C600FE8730 /* AppState.swift */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,7 @@
 		3710CA362DE7940200AB9B30 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3710CA382DE7940200AB9B30 /* Corner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Corner.entitlements; sourceTree = "<group>"; };
 		3748A36E2DECB21900315459 /* DraggablePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggablePanel.swift; sourceTree = "<group>"; };
+		37872D362DEF6836006DA2CA /* DragHostingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragHostingView.swift; sourceTree = "<group>"; };
 		37A553E72DE795B900FE8730 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37A553EB2DE797C600FE8730 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +60,7 @@
 		3710CA2E2DE793FF00AB9B30 /* Corner */ = {
 			isa = PBXGroup;
 			children = (
+				37872D362DEF6836006DA2CA /* DragHostingView.swift */,
 				37A553E72DE795B900FE8730 /* AppDelegate.swift */,
 				3710CA2F2DE793FF00AB9B30 /* CornerApp.swift */,
 				3710CA312DE793FF00AB9B30 /* ContentView.swift */,
@@ -149,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37A553EC2DE797C600FE8730 /* AppState.swift in Sources */,
+				37872D372DEF6836006DA2CA /* DragHostingView.swift in Sources */,
 				3748A36F2DECB21900315459 /* DraggablePanel.swift in Sources */,
 				37A553E82DE795B900FE8730 /* AppDelegate.swift in Sources */,
 				3710CA322DE793FF00AB9B30 /* ContentView.swift in Sources */,

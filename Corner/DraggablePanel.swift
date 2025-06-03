@@ -2,14 +2,14 @@ import Cocoa
 
 class DraggablePanel: NSPanel {
     var initialLocation: NSPoint?
-
-    override var canBecomeKey: Bool {
-        return true
-    }
-
+    
+    override var canBecomeKey: Bool { return true }
+    
     override func mouseDown(with event: NSEvent) {
+        print("fires")
+        if !isKeyWindow { makeKey() }          // activate immediately
         initialLocation = event.locationInWindow
-        super.mouseDown(with: event)
+        // no super.mouseDown → no “first-click just for activation” delay
     }
 
     override func mouseDragged(with event: NSEvent) {
@@ -25,6 +25,6 @@ class DraggablePanel: NSPanel {
 
     override func mouseUp(with event: NSEvent) {
         initialLocation = nil
-        super.mouseUp(with: event)
+        // super.mouseUp not needed either
     }
 }
