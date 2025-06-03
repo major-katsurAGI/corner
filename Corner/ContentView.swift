@@ -97,6 +97,27 @@ struct ContentView: View {
 
             Spacer()
 
+            //------------------- LEFT/RIGHT BUTTONS -------------------------
+            HStack(spacing: 6) {
+                Button(action: showPreviousImage) {
+                    Image(systemName: "chevron.left")
+                        .padding(7)
+                        .background(Color.black.opacity(0.5))
+                        .clipShape(Circle())
+                }
+
+                Spacer()
+
+                Button(action: showNextImage) {
+                    Image(systemName: "chevron.right")
+                        .padding(7)
+                        .background(Color.black.opacity(0.5))
+                        .clipShape(Circle())
+                }
+            }
+            
+            Spacer()
+
             //------------------- BOTTOM-LEFT: folder + interval ------------
             HStack(spacing: 6) {
                 folderButton
@@ -196,6 +217,19 @@ struct ContentView: View {
         timer?.invalidate()
         timer = nil
     }
+    
+    private func showPreviousImage() {
+        guard !imageURLs.isEmpty else { return }
+        currentImageIndex = (currentImageIndex - 1 + imageURLs.count) % imageURLs.count
+        loadImageAsync(at: imageURLs[currentImageIndex])
+    }
+
+    private func showNextImage() {
+        guard !imageURLs.isEmpty else { return }
+        currentImageIndex = (currentImageIndex + 1) % imageURLs.count
+        loadImageAsync(at: imageURLs[currentImageIndex])
+    }
+
 
     private func loadImageAsync(at url: URL) {
         DispatchQueue.global(qos: .userInitiated).async {

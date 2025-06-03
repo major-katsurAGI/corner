@@ -20,8 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.level = .screenSaver
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.hidesOnDeactivate = false
-        panel.isOpaque = false                    // allow transparency
-        panel.backgroundColor = .clear            // panel itself is clear
+        panel.isOpaque = false
+        panel.backgroundColor = .clear
         panel.hasShadow = true
         panel.center()
 
