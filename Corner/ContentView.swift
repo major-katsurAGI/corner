@@ -98,14 +98,14 @@ struct ContentView: View {
             Spacer()
 
             //------------------- BOTTOM-LEFT: folder + interval ------------
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 folderButton
                 if appState.selectedFolder != nil { clearButton }
                 intervalMenu
                 Spacer()
             }
         }
-        .padding()
+        .padding(10)
         .buttonStyle(.plain)
     }
 
@@ -114,7 +114,7 @@ struct ContentView: View {
             appState.anchor = appState.anchor == .left ? .right : .left
         } label: {
             Image(systemName: appState.anchor == .left ? "arrow.right" : "arrow.left")
-                .padding(8)
+                .padding(7)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
@@ -123,7 +123,7 @@ struct ContentView: View {
     private var folderButton: some View {
         Button { appState.selectFolder?() } label: {
             Image(systemName: "folder")
-                .padding(8)
+                .padding(7)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
@@ -132,7 +132,7 @@ struct ContentView: View {
     private var clearButton: some View {
         Button { appState.clearSelection() } label: {
             Image(systemName: "xmark.circle")
-                .padding(8)
+                .padding(7)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
@@ -149,7 +149,7 @@ struct ContentView: View {
             Button("1 hour")      { setInterval(3600) }
         } label: {
             Image(systemName: "timer")
-                .padding(8)
+                .padding(7)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }

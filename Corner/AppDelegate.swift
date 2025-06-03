@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let layer = hostingView.layer {
             layer.cornerRadius = cornerRadius
             layer.masksToBounds = true
-            layer.backgroundColor = NSColor.black.withAlphaComponent(0.5).cgColor
+            layer.backgroundColor = NSColor.black.withAlphaComponent(0.85).cgColor
         }
         // --------------------------------------------------------------------
 
