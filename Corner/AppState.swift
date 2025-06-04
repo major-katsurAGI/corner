@@ -26,6 +26,7 @@ class AppState: ObservableObject {
 
     @Published var currentImageSize: NSSize?
     @Published var anchor: Anchor = .left
+    @Published var fixedHeight: CGFloat = 220
 
     var selectFolder: (() -> Void)?
     func clearSelection() { selectedFolder = nil }   // keeps UI logic in one place

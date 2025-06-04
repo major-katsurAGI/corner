@@ -12,11 +12,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Borderless, always-on-top panel
         panel = DraggablePanel(
-            contentRect: NSRect(x: 0, y: 0, width: 350, height: fixedHeight),
+            contentRect: NSRect(x: 0, y: 0, width: 350, height: appState.fixedHeight),
             styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
         )
+        panel.appState = appState
+        panel.acceptsMouseMovedEvents = true
         panel.level = .screenSaver
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.hidesOnDeactivate = false

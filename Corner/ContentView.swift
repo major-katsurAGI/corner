@@ -13,7 +13,7 @@ struct ContentView: View {
 
     // Hover-fade
     @State private var isHovering = false
-    private let fixedHeight: CGFloat = 220
+    private var fixedHeight: CGFloat { appState.fixedHeight }
 
     // MARK: body
     var body: some View {
@@ -100,10 +100,10 @@ struct ContentView: View {
             Spacer()
 
             //------------------- LEFT/RIGHT BUTTONS -------------------------
-            HStack(spacing: 6) {
+            HStack(spacing: 4) {
                 Button(action: showPreviousImage) {
                     Image(systemName: "chevron.left")
-                        .padding(7)
+                        .padding(6)
                         .background(Color.black.opacity(0.5))
                         .clipShape(Circle())
                 }
@@ -112,7 +112,7 @@ struct ContentView: View {
 
                 Button(action: showNextImage) {
                     Image(systemName: "chevron.right")
-                        .padding(7)
+                        .padding(6)
                         .background(Color.black.opacity(0.5))
                         .clipShape(Circle())
                 }
@@ -121,13 +121,13 @@ struct ContentView: View {
             Spacer()
 
             //------------------- BOTTOM-LEFT: folder + interval ------------
-            HStack(spacing: 6) {
+            HStack(spacing: 4) {
                 folderButton
                 if appState.selectedFolder != nil { clearButton }
                 Spacer()
             }
         }
-        .padding(10)
+        .padding(7)
         .buttonStyle(.plain)
     }
 
@@ -136,7 +136,7 @@ struct ContentView: View {
             appState.anchor = appState.anchor == .left ? .right : .left
         } label: {
             Image(systemName: appState.anchor == .left ? "arrow.right" : "arrow.left")
-                .padding(7)
+                .padding(6)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
@@ -145,7 +145,7 @@ struct ContentView: View {
     private var folderButton: some View {
         Button { appState.selectFolder?() } label: {
             Image(systemName: "folder")
-                .padding(7)
+                .padding(6)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
@@ -154,7 +154,7 @@ struct ContentView: View {
     private var clearButton: some View {
         Button { appState.clearSelection() } label: {
             Image(systemName: "xmark.circle")
-                .padding(7)
+                .padding(6)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
@@ -171,7 +171,7 @@ struct ContentView: View {
             Button("1 hour")      { setInterval(3600) }
         } label: {
             Image(systemName: "timer")
-                .padding(6)
+                .padding(5)
                 .background(Color.black.opacity(0.5))
                 .clipShape(Circle())
         }
@@ -242,9 +242,9 @@ struct ContentView: View {
         }
     }
 
-    private func updateSize(for image: NSImage) {
+    private func updateSize(for image: NSImage) { // REPLACE entire func
         let ratio = image.size.width / max(image.size.height, 1)
-        appState.currentImageSize = NSSize(width: fixedHeight * ratio,
-                                           height: fixedHeight)
+        appState.currentImageSize = NSSize(width: appState.fixedHeight * ratio,
+                                           height: appState.fixedHeight)
     }
 }

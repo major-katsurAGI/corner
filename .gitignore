@@ -44,3 +44,4 @@ Packages/
 .idea/
 .vscode/
 *.log
+.glimpse
