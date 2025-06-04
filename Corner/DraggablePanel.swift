@@ -5,8 +5,8 @@ class DraggablePanel: NSPanel {
 
     // ── constants ──────────────────────────────────────────────────────────
     private let band:   CGFloat = 20          // thickness of resize zone
-    private let minH:   CGFloat = 160
-    private let maxH:   CGFloat = 800
+    private let minH:   CGFloat = 165
+    private let maxH:   CGFloat = 500
 
     // ── drag state ─────────────────────────────────────────────────────────
     private var resizing  = false
