@@ -3,6 +3,7 @@ import SwiftUI
 import Combine
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    private var statusItem: NSStatusItem?
     var panel: DraggablePanel!
     let appState = AppState()
     private var cancellables = Set<AnyCancellable>()
@@ -68,6 +69,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 appState.selectedFolder = url          // kicks off loadImages → startRotation
             }
         }
+        
+        NSApp.setActivationPolicy(.accessory)
+
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        if let button = statusItem?.button {
+            button.image = NSImage(
+                systemSymbolName: "photo.on.rectangle.angled",
+                accessibilityDescription: "CornerFrame")
+        }
+
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(
+            title: "Quit Corner",
+            action: #selector(quitApp),
+            keyEquivalent: "q"))
+        statusItem?.menu = menu
     }
 
     // MARK: - Folder picker
@@ -101,4 +118,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                           height: newSize.height)
         }
     }
+    
+    @objc private func quitApp(_ sender: Any?) {
+        NSApp.terminate(sender)
+    }
 }
+
