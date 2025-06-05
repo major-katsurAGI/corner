@@ -1,8 +1,7 @@
 import Foundation
 
-enum Anchor {
-    case left
-    case right
+enum Anchor: String {
+    case left, right
 }
 
 class AppState: ObservableObject {
@@ -25,10 +24,24 @@ class AppState: ObservableObject {
     }
 
     @Published var currentImageSize: NSSize?
-    @Published var anchor: Anchor = .left
-    @Published var fixedHeight: CGFloat = 220
+    @Published var fixedHeight: CGFloat {                 // <-- replace old line
+        didSet { UserDefaults.standard.set(Double(fixedHeight), forKey: "fixedHeight") }
+    }
+    @Published var anchor: Anchor {
+        didSet { UserDefaults.standard.set(anchor.rawValue, forKey: "anchorSide") }
+    }
 
     var selectFolder: (() -> Void)?
     func clearSelection() { selectedFolder = nil }   // keeps UI logic in one place
+    
+    init() {
+        if let raw = UserDefaults.standard.string(forKey: "anchorSide"),
+           let saved = Anchor(rawValue: raw) { anchor = saved }
+        else { anchor = .left }
+        
+        let savedHeight = UserDefaults.standard.double(forKey: "fixedHeight")
+        if (165...500).contains(savedHeight) { fixedHeight = CGFloat(savedHeight) }
+        else { fixedHeight = 220 }
+    }
 }
 
