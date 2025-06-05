@@ -8,7 +8,8 @@ struct ContentView: View {
     @State private var currentImageIndex = 0
     @State private var currentImage: NSImage?
     @State private var timer: Timer?
-    @State private var rotationInterval: Double = 30        // default 30 s
+    
+    @AppStorage("rotationInterval") private var rotationInterval: Double = 30
     // ----------------------------------------------------------------------
 
     // Hover-fade
@@ -78,6 +79,7 @@ struct ContentView: View {
                        maxHeight: .infinity,
                        alignment: .center)
                 .multilineTextAlignment(.center)
+                .foregroundColor(.white)
         }
     }
 
@@ -129,6 +131,8 @@ struct ContentView: View {
         }
         .padding(7)
         .buttonStyle(.plain)
+        .foregroundColor(.white)
+        .tint(.white)
     }
 
     private var anchorButton: some View {
