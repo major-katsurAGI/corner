@@ -74,9 +74,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem?.button {
-            button.image = NSImage(
-                systemSymbolName: "photo.on.rectangle.angled",
-                accessibilityDescription: "CornerFrame")
+            if let image = NSImage(named: "CornerMenuIcon") {
+                image.size = NSSize(width: 12, height: 12)
+                image.isTemplate = true
+                button.image = image
+            }
         }
 
         let menu = NSMenu()
